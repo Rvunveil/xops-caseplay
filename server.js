@@ -183,6 +183,27 @@ async function handleMessage(ws, msg) {
     console.log(`[WS MSG] ${type} | token=${sessionToken ? sessionToken.slice(0,16) + '…' : 'none'}`);
   }
 
+  // Auto-bind any authenticated socket that reconnected without explicit RECONNECT
+  if (sessionToken && !clientMap.has(ws)) {
+    try {
+      const session = await sessionStore.verifySession(sessionToken);
+      if (session && games[session.gameId]) {
+        if (!gameClients[session.gameId]) gameClients[session.gameId] = new Set();
+        gameClients[session.gameId].add(ws);
+        clientMap.set(ws, {
+          sessionToken,
+          gameId   : session.gameId,
+          teamId   : session.teamId || null,
+          isAdmin  : session.role === 'admin',
+          role     : session.role
+        });
+        console.log(`[WS Auto-Bind] Associated socket with ${session.role} in game ${session.gameId}`);
+      }
+    } catch (e) {
+      // non-fatal
+    }
+  }
+
   switch (type) {
     // ── Public (no auth required) ──────────────────────────────────────────
     case 'JOIN_GAME':    return await handleJoinGame(ws, payload);
@@ -732,7 +753,10 @@ function broadcastGameState(gameId) {
   if (!game || !gameClients[gameId]) return;
 
   gameClients[gameId].forEach(ws => {
-    if (ws.readyState !== WebSocket.OPEN) return;
+    if (ws.readyState !== WebSocket.OPEN) {
+      gameClients[gameId].delete(ws);
+      return;
+    }
     const ctx = clientMap.get(ws);
     if (!ctx) return;
 

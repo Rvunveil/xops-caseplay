@@ -77,13 +77,13 @@ export function connectWS() {
       }
     }, 25000);
 
-    // If we have a saved session, attempt to reconnect
-    const savedSession = Session.load();
-    if (savedSession?.sessionToken && !clientState.sessionToken) {
-      console.log('[WS] Found saved session, sending RECONNECT…');
+    // If we have an active or saved session, immediately re-authenticate
+    const token = clientState.sessionToken || Session.load()?.sessionToken;
+    if (token) {
+      console.log('[WS] Re-authenticating session…');
       ws.send(JSON.stringify({
         type: 'RECONNECT',
-        sessionToken: savedSession.sessionToken
+        sessionToken: token
       }));
     }
   };
@@ -390,8 +390,23 @@ export function navigate(page, params = {}) {
 }
 
 function updateCurrentPage(newState) {
+  if (currentPage === 'admin') {
+    const container = document.getElementById('page-container');
+    if (container) {
+      try {
+        renderAdmin(container);
+        return;
+      } catch (err) {
+        console.error('[Admin Update Error]', err);
+      }
+    }
+  }
   if (typeof currentPageUpdater === 'function') {
-    try { currentPageUpdater(newState); } catch { /* ignore */ }
+    try {
+      currentPageUpdater(newState);
+    } catch (err) {
+      console.error('[Update Error]', err);
+    }
   }
 }
 
