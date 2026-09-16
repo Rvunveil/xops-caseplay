@@ -487,10 +487,21 @@ export function renderRiskBar(riskLevel, color) {
     // Connect WebSocket FIRST (it will attempt RECONNECT if session exists)
     connectWS();
 
-    // Show landing unless we have a saved session (RECONNECT will route us)
+    // Show landing or admin based on hash, unless we have a saved session
     const savedSession = Session.load();
     if (!savedSession) {
-      navigate('landing');
+      if (window.location.hash === '#admin') {
+        const pw = prompt('🔒 Admin Access\n\nEnter admin password:');
+        if (pw === 'Chennai-ops') {
+          navigate('join', { admin: true });
+        } else {
+          if (pw !== null) alert('Incorrect password.');
+          window.location.hash = '';
+          navigate('landing');
+        }
+      } else {
+        navigate('landing');
+      }
     }
     // If we have a saved session, connectWS onopen will send RECONNECT,
     // and the server will route us to the correct screen via SESSION_RESTORED.
