@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="X-OPS CASEPLAY: The Obermeyer Gambit — A fast, competitive operations strategy game for XIME Chennai.">
+  <meta name="theme-color" content="#0a0a0f">
+  <title>X-OPS CASEPLAY | The Obermeyer Gambit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Mobile detection — runs before anything renders -->
+  <script>
+    (function() {
+      var w = window.innerWidth || screen.width;
+      var isMobile = /Android|iPhone|iPod|Windows Phone/i.test(navigator.userAgent)
+                     || (w < 768 && !/iPad|Tablet/i.test(navigator.userAgent));
+      if (isMobile) {
+        document.addEventListener('DOMContentLoaded', function() {
+          var overlay = document.createElement('div');
+          overlay.id = 'mobile-block';
+          overlay.style.cssText = [
+            'position:fixed', 'inset:0', 'z-index:99999',
+            'background:#0a0a0f', 'display:flex', 'flex-direction:column',
+            'align-items:center', 'justify-content:center', 'text-align:center',
+            'padding:2rem', 'gap:1.5rem'
+          ].join(';');
+          overlay.innerHTML = [
+            '<div style="font-size:3.5rem">💻</div>',
+            '<div style="font-size:1.6rem;font-weight:900;color:#fff;line-height:1.2">Best on a Laptop<br>or Tablet</div>',
+            '<div style="color:#888;font-size:0.95rem;max-width:320px;line-height:1.6">',
+              'X-OPS CASEPLAY is optimised for larger screens.<br>',
+              'Please open this on a <strong style="color:#fff">laptop, desktop, or iPad</strong> for the best experience.',
+            '</div>',
+            '<div style="border:1px solid #333;border-radius:12px;padding:1rem 1.5rem;color:#555;font-size:0.8rem;max-width:280px">',
+              'If you\'re on a tablet, try rotating to <strong style="color:#888">landscape mode</strong>.',
+            '</div>',
+            '<button onclick="document.getElementById(\'mobile-block\').remove()" ',
+              'style="margin-top:0.5rem;padding:0.75rem 2rem;background:transparent;border:1px solid #444;',
+              'border-radius:8px;color:#666;font-size:0.85rem;cursor:pointer;">',
+              'Continue anyway →',
+            '</button>'
+          ].join('');
+          document.body.appendChild(overlay);
+        });
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="app">
+    <div id="loading-screen" class="loading-screen">
+      <div class="loading-logo">
+        <span class="logo-x">X</span><span class="logo-ops">-OPS</span>
+      </div>
+      <div class="loading-bar-container">
+        <div class="loading-bar"></div>
+      </div>
+    </div>
+    <div id="page-container"></div>
+  </div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Main app -->
+  <script src="app.js" type="module"></script>
+</body>
+</html>
