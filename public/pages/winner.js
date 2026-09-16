@@ -61,6 +61,44 @@ export function renderWinner(container) {
           </div>
         </div>
 
+        <!-- Solution & Strategic Impact Summary -->
+        <div class="card mb-6" style="background:var(--bg-elevated);border-left:4px solid var(--teal);text-align:left;">
+          <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-4);">
+            <span style="font-size:2rem;">💡</span>
+            <div>
+              <div style="font-weight:800;font-size:1.15rem;color:var(--teal);">Executive Debrief: Why This Strategy Won</div>
+              <div style="font-size:0.8rem;color:var(--text-muted);">Harvard Business School: Sport Obermeyer & Accurate Response Method</div>
+            </div>
+          </div>
+          
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:var(--space-4);margin-bottom:var(--space-4);font-size:0.85rem;">
+            <div style="padding:var(--space-3);background:var(--bg-card);border-radius:var(--radius-md);border:1px solid var(--border);">
+              <div style="font-weight:700;color:var(--accent);margin-bottom:4px;">1. Mass vs Agile Arbitrage</div>
+              <div style="color:var(--text-secondary);line-height:1.5;">
+                Winning teams committed <strong>predictable, low-risk items (Alpine, Blizzard)</strong> to the cheap ₹10K factory early, locking in rock-bottom unit costs and high gross margins.
+              </div>
+            </div>
+
+            <div style="padding:var(--space-3);background:var(--bg-card);border-radius:var(--radius-md);border:1px solid var(--border);">
+              <div style="font-weight:700;color:var(--amber);margin-bottom:4px;">2. Option Value of Waiting</div>
+              <div style="color:var(--text-secondary);line-height:1.5;">
+                They preserved Agile capacity for <strong>volatile items (Eclipse, Drift)</strong> until trade show signals arrived, avoiding catastrophic unsold salvage losses (₹5K salvage vs ₹10K cost).
+              </div>
+            </div>
+
+            <div style="padding:var(--space-3);background:var(--bg-card);border-radius:var(--radius-md);border:1px solid var(--border);">
+              <div style="font-weight:700;color:var(--red);margin-bottom:4px;">3. Penalty & Stockout Control</div>
+              <div style="color:var(--text-secondary);line-height:1.5;">
+                Unmet demand penalized teams at ₹5,000/unit. The champion optimized service levels without blindly overproducing, keeping stockouts minimal.
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size:0.8rem;color:var(--text-dim);border-top:1px solid var(--border);padding-top:var(--space-3);">
+            👉 Click below to explore the <strong>full 7-slide case study</strong> detailing the real Harvard business case, math formulas, and supply chain lessons.
+          </div>
+        </div>
+
         <!-- Secondary awards -->
         <div id="awards-section" style="opacity:0;transition:opacity 0.8s ease;">
           <div class="divider"></div>
@@ -76,12 +114,12 @@ export function renderWinner(container) {
           </div>
 
           <div style="display:flex;justify-content:center;gap:var(--space-4);flex-wrap:wrap;">
-            <button class="btn btn-primary btn-lg" onclick="window.location.reload()">
-              📚 See Case Reveal →
+            <button class="btn btn-primary btn-lg" onclick="window.goCaseReveal()">
+              📚 Read Full Case Study & Detailed Solution →
             </button>
             ${clientState.teamId ? `
               <button class="btn btn-ghost btn-lg" onclick="window.goProfile()">
-                🎭 My Operations Profile
+                🎭 My Operations Strategy Profile
               </button>
             ` : ''}
           </div>
@@ -115,7 +153,8 @@ export function renderWinner(container) {
     if (awards) awards.style.opacity = '1';
   }, 2500 + runnerUp.length * 400);
 
-  window.goProfile = () => navigate('profile');
+  window.goCaseReveal = () => navigate('case-reveal');
+  window.goProfile    = () => navigate('profile');
 
   return null;
 }

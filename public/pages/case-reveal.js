@@ -2,6 +2,8 @@
 // CASE REVEAL / DEBRIEF
 // =============================================================================
 
+import { navigate, clientState } from '../app.js';
+
 export function renderCaseReveal(container) {
   const slides = getSlides();
   let currentSlide = 0;
@@ -10,7 +12,8 @@ export function renderCaseReveal(container) {
     <div class="page" style="background:var(--bg-deep);">
       <div class="top-bar">
         <div class="top-bar-logo"><span class="x">X</span>-OPS CASEPLAY</div>
-        <div class="top-bar-info">
+        <div class="top-bar-info" style="display:flex;align-items:center;gap:var(--space-3);">
+          <button class="btn btn-ghost btn-sm" onclick="window.backToWinner()">🏆 View Results</button>
           <span style="color:var(--accent);font-weight:700;">📚 CASE REVEAL</span>
           <span id="slide-counter" style="color:var(--text-muted);font-size:0.8rem;">1 / ${slides.length}</span>
         </div>
@@ -74,7 +77,11 @@ export function renderCaseReveal(container) {
       currentSlide++;
       renderSlide(currentSlide);
     } else {
-      window.location.reload();
+      if (clientState.isAdmin) {
+        navigate('admin');
+      } else {
+        navigate('winner');
+      }
     }
   };
 
@@ -82,6 +89,14 @@ export function renderCaseReveal(container) {
     if (currentSlide > 0) {
       currentSlide--;
       renderSlide(currentSlide);
+    }
+  };
+
+  window.backToWinner = () => {
+    if (clientState.isAdmin) {
+      navigate('admin');
+    } else {
+      navigate('winner');
     }
   };
 

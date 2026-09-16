@@ -631,8 +631,7 @@ async function handleAdminAction(ws, sessionToken, { action, params = {} }) {
       await db.updateGameStatus(gameId, 'DEBRIEF', 4);
       await db.logEvent(gameId, 'DEBRIEF_STARTED', 4, {});
       game.status = 'DEBRIEF';
-      // Revoke all sessions since the game is over
-      await sessionStore.deleteAllForGame(gameId);
+      // Do NOT delete sessions here so players can explore the Case Reveal & Operations Profile
       break;
 
     case 'PAUSE_GAME':
